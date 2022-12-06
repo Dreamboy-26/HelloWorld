@@ -1,4 +1,3 @@
-
 import './App.css'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
@@ -8,12 +7,14 @@ function App() {
   const [skip, setSkip] = useState(0)
 
   useEffect(() => {
-    axios
-      .get(`https://dummyjson.com/products?skip=${skip}&limit=5`)
-      .then((res) => {
-        console.log(res.data.products)
-        setState([...state, ...res.data.products])
-      })
+   
+      axios
+        .get(`https://dummyjson.com/products?skip=${skip}&limit=5`)
+        .then((res) => {
+          
+          setState([...state, ...res.data.products])
+          console.log(res.data.products)
+        })
   }, [skip])
 
   const scrollToEnd = () => {
@@ -23,10 +24,9 @@ function App() {
   window.addEventListener('scroll', () => {
     const { scrollTop, scrollHeight, clientHeight } = document.documentElement
 
-    if (scrollTop + clientHeight >= scrollHeight ) {
+    if (scrollTop + clientHeight >= scrollHeight) {
       scrollToEnd()
     }
-  
   })
 
   return (
@@ -34,12 +34,11 @@ function App() {
       {state.map((e, i) => {
         return (
           <div key={i} className="container">
-            <div className='image'>
-            <img src={e.thumbnail} width="100%"  height="100%"/>
-
+            <div className="image">
+              <img src={e.thumbnail} width="100%" height="100%" />
             </div>
-            <div className='brandName'>
-              <h3>{e.brand}</h3>
+            <div className="brandName">
+              <h3>{e.title}</h3>
             </div>
           </div>
         )
@@ -49,3 +48,23 @@ function App() {
 }
 
 export default App
+
+// if we want to see initially 30 products and on scrolling next 5 products we can use
+
+/* if(skip===0)
+{
+  axios
+  .get(`https://dummyjson.com/products?skip=${skip}&limit=30`)
+  .then((res) => {
+    console.log(res.data.products)
+    setState([...state, ...res.data.products])
+  })
+}
+else{
+  axios
+  .get(`https://dummyjson.com/products?skip=${skip}&limit=5`)
+  .then((res) => {
+    console.log(res.data.products)
+    setState([...state, ...res.data.products])
+  })
+} */
