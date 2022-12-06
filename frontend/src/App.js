@@ -5,16 +5,18 @@ import { useEffect, useState } from 'react'
 function App() {
   const [state, setState] = useState([])
   const [skip, setSkip] = useState(0)
+  const [stopRequest, setStopRequest] = useState(true)
 
   useEffect(() => {
-   
-      axios
-        .get(`https://dummyjson.com/products?skip=${skip}&limit=5`)
-        .then((res) => {
-          
-          setState([...state, ...res.data.products])
-          console.log(res.data.products)
-        })
+    axios
+      .get(`https://dummyjson.com/products?skip=${skip}&limit=5`)
+      .then((res) => {
+        setState([...state, ...res.data.products])
+        console.log(res.data.products)
+        if (res.data.products == 0) {
+          setStopRequest(false)
+        }
+      })
   }, [skip])
 
   const scrollToEnd = () => {
@@ -24,8 +26,10 @@ function App() {
   window.addEventListener('scroll', () => {
     const { scrollTop, scrollHeight, clientHeight } = document.documentElement
 
-    if (scrollTop + clientHeight >= scrollHeight) {
-      scrollToEnd()
+    if (stopRequest == true) {
+      if (scrollTop + clientHeight >= scrollHeight) {
+        scrollToEnd()
+      }
     }
   })
 
